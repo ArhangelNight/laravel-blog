@@ -18,4 +18,29 @@ class Comment extends Model
     {
         return $this->hasOne(User::class);
     }
+
+    public function allow()
+    {
+        $this->status = 1;
+        $this->save();
+    }
+
+    public function dissAlow()
+    {
+        $this->status = 0;
+        $this->save();
+    }
+
+    public function toggleStatus()
+    {
+        if ($this->status = 0) {
+            return $this->allow();
+        }
+        return $this->dissAlow();
+    }
+
+    public function remove()
+    {
+        $this->delete();
+    }
 }

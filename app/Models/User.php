@@ -14,6 +14,9 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    const IS_BANNED = 1;
+    const IS_ACTIVE = 0;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -94,5 +97,45 @@ class User extends Authenticatable
             return '/img/no-user-image.png';
         }
         return '/uploads/' . $this->image;
+    }
+
+    public function makeAdmin()
+    {
+        $this->is_admin = 1;
+        $this->save();
+    }
+
+    public function makeNormal()
+    {
+        $this->is_admin = 0;
+        $this->save();
+    }
+
+    public function toggleAdmin($value)
+    {
+        if ($value == null) {
+            return $this->makeNormal();
+        }
+        return  $this->makeAdmin();
+    }
+
+    public function ban()
+    {
+        $this->status = User::IS_BANNED;
+        $this->save();
+    }
+
+    public function unban()
+    {
+        $this->status = User::IS_ACTIVE;
+        $this->save();
+    }
+
+    public function toggleBan($value)
+    {
+        if ($value == null) {
+            return $this->unban();
+        }
+        return $this->ban();
     }
 }
